@@ -1,4 +1,4 @@
-# bookstore Server
+# Bookstore Server
 
 <br>
 
@@ -23,7 +23,7 @@
 ### 핵심 목표
 
 * DB 설계 → API 설계 → 실제 구현까지의 **백엔드 개발 경험**
-* JWT 기반 인증/인가 및 Role 기반 접근 제어(RBAC)
+* JWT 기반 인증/인가 및 Role 기반 접근 제어
 * 페이지네이션/검색/정렬이 가능한 API
 * Swagger / Postman 기반 문서화 및 테스트 자동화
 * JCloud 실서버 배포 
@@ -34,28 +34,38 @@
 
 ### 2-1. 로컬 실행
 
+#### 전제조건
+- Java 17 이상
+- PostgreSQL 16 실행 중
+
+#### 실행 단계
 ```bash
 # 1. 환경 변수 설정
-cp .env.example .env
+cp .env
 
 # 2. 빌드
 ./gradlew clean build
 
 # 3. 실행
-java -jar build/libs/bookstore-api.jar
+java -jar build/libs/bookstore-api-0.0.1-SNAPSHOT.jar
 ```
 
-또는 개발 환경 실행
-
+또는 개발 환경에서 바로 실행:
 ```bash
 ./gradlew bootRun
 ```
 
-### 2-2. Docker 실행
+### 2-2. Docker Compose로 전체 실행
+
+모든 의존성(PostgreSQL, 애플리케이션)을 한 번에 실행:
 
 ```bash
+# 빌드 및 실행
 docker-compose up -d --build
-```
+
+# 종료
+docker-compose down
+````
 
 <br>
 
@@ -141,6 +151,8 @@ Authorization: Bearer <ACCESS_TOKEN>
 | ADMIN | [admin@example.com](mailto:admin@example.com) | P@ssw0rd!|
 
 <br>
+
+---
 
 ## 7. DB 연결 정보 (테스트용)
 

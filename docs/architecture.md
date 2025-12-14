@@ -3,10 +3,6 @@
 ## 개요
 온라인 서점(Bookstore) API 서버의 전체 아키텍처 및 설계 원칙
 
-**프레임워크**: Spring Boot 3.4.12  
-**언어**: Java 17  
-**빌드 도구**: Gradle 8.5
-
 ---
 
 ## 전체 아키텍처
@@ -56,9 +52,9 @@
 
 ---
 
-## 계층별 구조 (Layered Architecture)
+## 계층별 구조
 
-### 1. Presentation Layer (Controller)
+### 1. Controller (Presentation Layer)
 **역할**: HTTP 요청/응답 처리, 입력 검증
 
 **위치**: `src/main/java/com/bookstore/api/{domain}/controller/`
@@ -90,7 +86,7 @@ public class BookController {
 
 ---
 
-### 2. Business Layer (Service)
+### 2. Service (Business Layer)
 **역할**: 비즈니스 로직 처리, 트랜잭션 관리
 
 **위치**: `src/main/java/com/bookstore/api/{domain}/service/`
@@ -121,7 +117,7 @@ public class OrderService {
 
 ---
 
-### 3. Data Access Layer (Repository)
+### 3. Repository (Data Access Layer)
 **역할**: 데이터베이스 접근
 
 **위치**: `src/main/java/com/bookstore/api/{domain}/repository/`
@@ -144,7 +140,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
 ---
 
-### 4. Domain Layer (Entity)
+### 4. Entity (Domain Layer)
 **역할**: 도메인 모델 정의
 
 **위치**: `src/main/java/com/bookstore/api/{domain}/entity/`
@@ -152,7 +148,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 **주요 책임**:
 - 데이터베이스 테이블 매핑
 - 엔티티 관계 정의
-- 도메인 로직 (간단한 메서드)
 
 **예시**:
 ```java
@@ -420,10 +415,9 @@ application-prod.yml         # 프로덕션 환경
 
 ### 환경 변수 (.env)
 ```env
-DB_HOST=localhost
+DB_HOST=postgres
 DB_PORT=5432
-JWT_SECRET=your-secret-key
-REDIS_HOST=localhost
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-min-256-bits-long
 ```
 
 ---
@@ -468,7 +462,7 @@ public class BookService {
 │  │                                │ │
 │  ▼                                ▼ │
 │  ┌──────────────┐   ┌────────────┐ │
-│  │  PostgreSQL  │   │   Redis    │ │
+│  │  PostgreSQL  │   │ Redis(선택) │ │
 │  │  Port: 5432  │   │ Port: 6379 │ │
 │  └──────────────┘   └────────────┘ │
 └──────────────────────────────────────┘

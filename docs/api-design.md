@@ -8,11 +8,11 @@
 ## 과제1 대비 수정사항
 
 ### 1. 엔드포인트 변경
-| 구분 | 과제1 설계 | 최종 구현 | 변경 사유 |
-|------|-----------|----------|----------|
-| 인증 | `/auth/login` | `/api/auth/login` | REST API 일관성 (prefix 추가) |
-| 사용자 | `/users/me` | `/api/users/me` | 동일 |
-| 장바구니 | `/cart` | `/api/cart` | 동일 |
+| 구분 | 과제1 설계 | 최종 구현 | 변경 사유         |
+|------|-----------|----------|---------------|
+| 인증 | `/auth/login` | `/api/auth/login` | REST API 일관성  |
+| 사용자 | `/users/me` | `/api/users/me` | 동일            |
+| 장바구니 | `/cart` | `/api/cart` | 동일            |
 
 ### 2. 응답 형식 표준화
 **과제1 설계:**
@@ -32,8 +32,6 @@
   "data": { ... }
 }
 ```
-- `isSuccess` → `success` (간결성)
-- `payload` → `data` (RESTful 관례)
 
 ### 3. 페이지네이션 응답 통일
 **Spring Data JPA의 Page 객체 활용:**
@@ -231,17 +229,7 @@
 
 ---
 
-## 검색 및 필터링
-
-### 도서 검색 쿼리 파라미터
-```
-GET /api/books?title={title}&author={author}&publisher={publisher}
-    &category={categoryId}&minPrice={min}&maxPrice={max}
-    &startDate={start}&endDate={end}
-    &page={page}&size={size}&sort={field,order}
-```
-
-### 정렬 옵션
+## 정렬 옵션
 - `createdAt,DESC` (최신순)
 - `price,ASC` (가격 낮은순)
 - `price,DESC` (가격 높은순)

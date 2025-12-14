@@ -1,14 +1,32 @@
 spring:
+  application:
+    name: bookstore-api
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
   datasource:
     url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:bookstore}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
 
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: validate
-    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        default_batch_fetch_size: 100
+    open-in-view: false
 
   flyway:
     enabled: true
@@ -32,6 +50,33 @@ spring:
           max-idle: 8
           min-idle: 2
 
+# JWT 설정
+jwt:
+    secret: ${JWT_SECRET}
+    access-token-validity-in-seconds: ${JWT_ACCESS_TOKEN_VALIDITY:3600}  # 1시간
+    refresh-token-validity-in-seconds: ${JWT_REFRESH_TOKEN_VALIDITY:1209600}  # 2주
+
+# Logging 설정
+logging:
+  level:
+    root: INFO
+    com.bookstore.api: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Actuator 설정
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
 springdoc:
   api-docs:
     path: /api-docs
@@ -39,43 +84,6 @@ springdoc:
     path: /swagger-ui.html
     config-url: /api-docs
     operations-sorter: method
-
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION:86400000}
-  refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,prometheus,metrics
-      base-path: /actuator
-  endpoint:
-    health:
-      show-details: always
-      probes:
-        enabled: true
-    metrics:
-      enabled: true
-  metrics:
-    export:
-      prometheus:
-        enabled: true
-    distribution:
-      percentiles-histogram:
-        http.server.requests: true
-    tags:
-      application: ${spring.application.name}
-
-  info:
-    env:
-      enabled: true
-    build:
-      enabled: true
-    git:
-      enabled: true
-      mode: full
 
 info:
   app:

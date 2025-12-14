@@ -73,7 +73,7 @@ DB_NAME=bookstore
 DB_USERNAME={your_username}
 DB_PASSWORD={your_password}
 
-# Redis
+# Redis  
 REDIS_HOST=localhost
 REDIS_PORT=6379
 REDIS_PASSWORD=
@@ -185,7 +185,6 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 * JWT 기반 인증/인가
 * 비밀번호 bcrypt 해시
-* Redis 캐싱 적용
 * 인덱스 기반 조회 최적화
 * Global Exception Handler로 에러 규격 통일
 * 헬스체크 API 제공
@@ -239,7 +238,7 @@ src/main/java/com/bookstore/api
 ├─ category        # 카테고리 관리
 ├─ comment         # 댓글
 ├─ common          # 공통 응답/예외/유틸
-├─ config          # 보안, Swagger, Redis 설정
+├─ config          # 보안, Swagger 설정
 ├─ coupon          # 쿠폰
 ├─ favorite        # 즐겨찾기
 ├─ user            # 사용자 관리
@@ -262,7 +261,6 @@ src/main/java/com/bookstore/api
 | Database | PostgreSQL                   |
 | ORM     | Spring Data JPA (Hibernate)  |
 | Auth    | JWT (Access / Refresh Token) |
-| Cache   | Redis                        |
 | Migration | Flyway                       |
 | API Docs | Swagger (springdoc-openapi)  |
 | Test    | JUnit 5                      |

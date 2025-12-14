@@ -300,7 +300,7 @@ AuthorizationFilter
 
 ---
 
-## 🗄데이터 플로우
+## 데이터 플로우
 
 ### 조회 요청 (Read)
 ```

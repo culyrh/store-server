@@ -12,12 +12,13 @@
 <br>
 
 ---
-
 ## 1. 프로젝트 개요
 
 이 프로젝트는 **과제 1에서 설계한 데이터베이스 스키마와 REST API 설계**를 기반으로, 이를 실제로 구현하고 **JCloud 환경에 배포**하는 것을 목표로 합니다.
 
 온라인 서점(Bookstore)을 도메인으로 하여, 사용자 인증/인가(JWT), 상품·카테고리·주문 등 핵심 기능을 중심으로 **확장 가능한 API 서버 구조**를 설계했습니다.
+
+<br>
 
 ### 핵심 목표
 
@@ -44,32 +45,35 @@
 | Test    | JUnit 5                      |
 | Deploy  | JCloud + Docker              |
 | CI      | Github Action                |
+
+
 ---
+<br>
 
 ## 3. 디렉토리 구조
 
 ```text
 src/main/java/com/bookstore/api
+├─ admin           # 관리자 전용 기능
 ├─ auth            # 인증/인가 (JWT, 로그인, 토큰 재발급)
-├─ user            # 사용자 관리
-├─ seller          # 판매자 관리
-├─ category        # 카테고리 관리
 ├─ book            # 도서(상품)
 ├─ cart            # 장바구니
-├─ order           # 주문
-├─ review          # 리뷰
-├─ coupon          # 쿠폰
-├─ favorite        # 즐겨찾기
-├─ admin           # 관리자 전용 기능
+├─ category        # 카테고리 관리
+├─ comment         # 댓글
 ├─ common          # 공통 응답/예외/유틸
 ├─ config          # 보안, Swagger, Redis 설정
+├─ coupon          # 쿠폰
+├─ favorite        # 즐겨찾기
+├─ user            # 사용자 관리
+├─ order           # 주문
+├─ review          # 리뷰
 ├─ security        # Spring Security + JWT
+├─ seller          # 판매자 관리
 ├─ healthcheck     # 헬스체크
 └─ root            # 루트 엔드포인트
 ```
-
-
 ---
+<br>
 
 ## 4. 실행 방법
 
@@ -99,30 +103,29 @@ docker-compose up -d --build
 ```
 
 ---
+<br>
 
 ## 5. 환경 변수 설명
 
-`.env.example` 기준
+.env.example 기준
 
 ```env
-# Application
-SPRING_PROFILES_ACTIVE=dev
-
 # Database
-DB_HOST=localhost
-DB_PORT=3306
+DB_HOST=postgres
+DB_PORT=5432
 DB_NAME=bookstore
-DB_USERNAME=bookstore
-DB_PASSWORD=bookstore
-
-# JWT
-JWT_SECRET=change-me
-JWT_ACCESS_TOKEN_EXPIRATION=3600
-JWT_REFRESH_TOKEN_EXPIRATION=604800
+DB_USERNAME={your_username}
+DB_PASSWORD={your_password}
 
 # Redis
 REDIS_HOST=localhost
 REDIS_PORT=6379
+REDIS_PASSWORD=
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production-min-256-bits-long
+JWT_EXPIRATION=86400000
+JWT_REFRESH_EXPIRATION=604800000
 
 # Server
 SERVER_PORT=8080
@@ -131,6 +134,7 @@ SERVER_PORT=8080
 **`.env` 파일 및 실제 비밀 정보는 GitHub에 커밋하지 않습니다.**
 
 ---
+<br>
 
 ## 6. 인증 / 인가 구조
 
@@ -159,6 +163,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 * 통계 API
 
 ---
+<br>
 
 ## 7. 예제 계정
 
@@ -168,6 +173,8 @@ Authorization: Bearer <ACCESS_TOKEN>
 | ADMIN | [admin@example.com](mailto:admin@example.com) | adminpwd123 |
 
 ---
+
+<br>
 
 ## 8. API 엔드포인트 요약
 
@@ -195,6 +202,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 > 전체 엔드포인트는 **Swagger 문서** 참고
 
 ---
+<br>
 
 ## 9. 공통 응답 & 에러 처리
 
@@ -221,6 +229,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 ```
 
 ---
+<br>
 
 ## 10. 보안 및 성능 고려사항
 
@@ -232,6 +241,7 @@ Authorization: Bearer <ACCESS_TOKEN>
 * 헬스체크 API 제공
 
 ---
+<br>
 
 ## 11. 테스트
 

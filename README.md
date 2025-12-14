@@ -97,7 +97,7 @@ JWT_REFRESH_EXPIRATION=604800000
 SERVER_PORT=8080
 ```
 
-**`.env` 파일 및 실제 비밀 정보는 GitHub에 커밋하지 않습니다.**
+**`.env` 파일 및 실제 비밀 정보는 GitHub에 커밋하지 않았습니다.**
 
 <br>
 
@@ -149,6 +149,8 @@ Authorization: Bearer <ACCESS_TOKEN>
 | ----- | --------------------------------------------- |-----------|
 | USER  | [user1@example.com](mailto:user1@example.com) | P@ssw0rd! |
 | ADMIN | [admin@example.com](mailto:admin@example.com) | P@ssw0rd!|
+
+- /docs에서 Swagger 회원가입, 로그인 테스트 결과를 확인할 수 있습니다.
 
 <br>
 

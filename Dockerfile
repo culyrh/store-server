@@ -11,8 +11,8 @@ RUN gradle build -x test --no-daemon
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-COPY --from=build /app/build/libs/*.jar /app/
-RUN mv /app/*-plain.jar /app/plain.jar && mv /app/*.jar /app/app.jar
+# build 결과 jar를 하나로 확정
+COPY --from=build /app/build/libs/*.jar /app/app.jar
 
 
 # 환경변수 설정

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
+// @Configuration
 public class SwaggerConfig {
 
     @Value("${server.port:8080}")

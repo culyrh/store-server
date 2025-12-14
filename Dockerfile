@@ -11,7 +11,7 @@ RUN gradle build -x test --no-daemon
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-COPY --from=build /app/build/libs/*.jar app.jar
+COPY --from=build /app/build/libs/*-boot.jar app.jar
 
 # 환경변수 설정
 ENV SPRING_PROFILES_ACTIVE=prod

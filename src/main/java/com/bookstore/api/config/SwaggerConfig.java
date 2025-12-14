@@ -36,6 +36,7 @@ public class SwaggerConfig {
                 );
 
         return new OpenAPI()
+                /*
                 .addServersItem(new Server()
                         .url("http://113.198.66.75:" + serverPort)
                         .description("Production Server")
@@ -44,6 +45,7 @@ public class SwaggerConfig {
                         .url("http://localhost:" + serverPort)
                         .description("Local Server")
                 )
+                */
                 .info(new Info()
                         .title("Bookstore API")
                         .description("온라인 서점 API 문서")

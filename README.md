@@ -28,7 +28,7 @@
 * Swagger / Postman 기반 문서화 및 테스트 자동화
 * JCloud 실서버 배포 
 
----
+<br>
 
 ## 2. 기술 스택
 
@@ -46,8 +46,6 @@
 | Deploy  | JCloud + Docker              |
 | CI      | Github Action                |
 
-
----
 <br>
 
 ## 3. 디렉토리 구조
@@ -72,8 +70,10 @@ src/main/java/com/bookstore/api
 ├─ healthcheck     # 헬스체크
 └─ root            # 루트 엔드포인트
 ```
----
+
 <br>
+
+---
 
 ## 4. 실행 방법
 
@@ -102,7 +102,6 @@ java -jar build/libs/bookstore-api.jar
 docker-compose up -d --build
 ```
 
----
 <br>
 
 ## 5. 환경 변수 설명
@@ -133,7 +132,6 @@ SERVER_PORT=8080
 
 **`.env` 파일 및 실제 비밀 정보는 GitHub에 커밋하지 않습니다.**
 
----
 <br>
 
 ## 6. 인증 / 인가 구조
@@ -162,7 +160,6 @@ Authorization: Bearer <ACCESS_TOKEN>
 * 전체 사용자 조회
 * 통계 API
 
----
 <br>
 
 ## 7. 예제 계정
@@ -172,9 +169,9 @@ Authorization: Bearer <ACCESS_TOKEN>
 | USER  | [user1@example.com](mailto:user1@example.com) | userpwd123  |
 | ADMIN | [admin@example.com](mailto:admin@example.com) | adminpwd123 |
 
----
-
 <br>
+
+---
 
 ## 8. API 엔드포인트 요약
 
@@ -201,7 +198,6 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 > 전체 엔드포인트는 **Swagger 문서** 참고
 
----
 <br>
 
 ## 9. 공통 응답 & 에러 처리
@@ -228,8 +224,9 @@ Authorization: Bearer <ACCESS_TOKEN>
 }
 ```
 
----
 <br>
+
+---
 
 ## 10. 보안 및 성능 고려사항
 
@@ -240,7 +237,6 @@ Authorization: Bearer <ACCESS_TOKEN>
 * Global Exception Handler로 에러 규격 통일
 * 헬스체크 API 제공
 
----
 <br>
 
 ## 11. 테스트

@@ -1,4 +1,4 @@
-package com.bookstore.api.review.entity;
+package com.bookstore.api.comment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,14 +8,14 @@ import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reviews")
+@Table(name = "comments")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@SQLDelete(sql = "UPDATE reviews SET deleted_at = NOW() WHERE id = ?")
+@SQLDelete(sql = "UPDATE comments SET deleted_at = NOW() WHERE id = ?")
 @Where(clause = "deleted_at IS NULL")
-public class Review {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,14 +24,11 @@ public class Review {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "book_id", nullable = false)
-    private Long bookId;
-
-    @Column(nullable = false)
-    private Integer rating;
+    @Column(name = "review_id", nullable = false)
+    private Long reviewId;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String comment;
+    private String content;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -53,8 +50,7 @@ public class Review {
         updatedAt = LocalDateTime.now();
     }
 
-    public void update(Integer rating, String comment) {
-        this.rating = rating;
-        this.comment = comment;
+    public void update(String content) {
+        this.content = content;
     }
 }

@@ -61,7 +61,6 @@ services:
       - bookstore-network
     restart: unless-stopped
 
-
 volumes:
   postgres_data:
   redis_data:

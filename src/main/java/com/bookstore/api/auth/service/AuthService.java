@@ -1,8 +1,6 @@
 package com.bookstore.api.auth.service;
 
 import com.bookstore.api.auth.dto.*;
-import com.bookstore.api.auth.entity.RefreshToken;
-import com.bookstore.api.auth.repository.RefreshTokenRepository;
 import com.bookstore.api.common.exception.BusinessException;
 import com.bookstore.api.common.exception.ErrorCode;
 import com.bookstore.api.security.jwt.JwtTokenProvider;
@@ -28,7 +26,7 @@ import java.util.Map;
 public class AuthService {
 
     private final UserRepository userRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenService refreshTokenService;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
@@ -98,8 +96,8 @@ public class AuthService {
         );
         String refreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
-        // 4. Refresh Token 저장
-        saveRefreshToken(user.getId(), refreshToken);
+        // 4. Refresh Token Redis에 저장
+        refreshTokenService.saveRefreshToken(user.getEmail(), refreshToken);
 
         log.info("로그인 성공: userId={}", user.getId());
 
@@ -130,18 +128,15 @@ public class AuthService {
             throw new BusinessException(ErrorCode.INVALID_TOKEN, "Refresh Token이 아닙니다.");
         }
 
-        // 2. Refresh Token 존재 여부 확인
-        RefreshToken storedToken = refreshTokenRepository.findByToken(refreshToken)
-                .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_TOKEN, "유효하지 않은 Refresh Token입니다."));
+        // 2. 이메일 추출
+        String email = jwtTokenProvider.getEmailFromToken(refreshToken);
 
-        // 3. 만료 확인
-        if (storedToken.isExpired()) {
-            refreshTokenRepository.delete(storedToken);
-            throw new BusinessException(ErrorCode.TOKEN_EXPIRED, "Refresh Token이 만료되었습니다.");
+        // 3. Redis에 저장된 토큰과 비교
+        if (!refreshTokenService.validateRefreshToken(email, refreshToken)) {
+            throw new BusinessException(ErrorCode.INVALID_TOKEN, "유효하지 않은 Refresh Token입니다.");
         }
 
         // 4. 사용자 조회
-        String email = jwtTokenProvider.getEmailFromToken(refreshToken);
         User user = userRepository.findByEmailAndDeletedAtIsNull(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
@@ -152,9 +147,8 @@ public class AuthService {
         );
         String newRefreshToken = jwtTokenProvider.createRefreshToken(user.getEmail());
 
-        // 6. 새 Refresh Token 저장
-        refreshTokenRepository.delete(storedToken);
-        saveRefreshToken(user.getId(), newRefreshToken);
+        // 6. 새 Refresh Token Redis에 저장
+        refreshTokenService.saveRefreshToken(user.getEmail(), newRefreshToken);
 
         log.info("토큰 갱신 성공: userId={}", user.getId());
 
@@ -175,29 +169,9 @@ public class AuthService {
         User user = userRepository.findByEmailAndDeletedAtIsNull(email)
                 .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND));
 
-        // Refresh Token 삭제
-        refreshTokenRepository.deleteByUserId(user.getId());
+        // Refresh Token Redis에서 삭제
+        refreshTokenService.deleteRefreshToken(email);
 
         log.info("로그아웃 성공: userId={}", user.getId());
-    }
-
-    /**
-     * Refresh Token 저장
-     */
-    private void saveRefreshToken(Long userId, String token) {
-        // 기존 토큰 삭제
-        refreshTokenRepository.deleteByUserId(userId);
-
-        // 새 토큰 저장
-        Long expirationSeconds = jwtTokenProvider.getExpirationTime(token);
-        LocalDateTime expiresAt = LocalDateTime.now().plusSeconds(expirationSeconds);
-
-        RefreshToken refreshToken = RefreshToken.builder()
-                .userId(userId)
-                .token(token)
-                .expiresAt(expiresAt)
-                .build();
-
-        refreshTokenRepository.save(refreshToken);
     }
 }

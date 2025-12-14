@@ -18,6 +18,26 @@ CREATE TABLE users (
                        is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+CREATE INDEX idx_user_email ON users(email);
+CREATE INDEX idx_user_role ON users(role);
+CREATE INDEX idx_user_created_at ON users(created_at);
+
+COMMENT ON TABLE users IS '사용자';
+COMMENT ON COLUMN users.id IS '사용자 ID';
+COMMENT ON COLUMN users.email IS '이메일';
+COMMENT ON COLUMN users.password IS '비밀번호 (암호화)';
+COMMENT ON COLUMN users.name IS '이름';
+COMMENT ON COLUMN users.birth_date IS '생년월일';
+COMMENT ON COLUMN users.gender IS '성별';
+COMMENT ON COLUMN users.address IS '주소';
+COMMENT ON COLUMN users.phone_number IS '전화번호';
+COMMENT ON COLUMN users.role IS '권한 (USER, ADMIN)';
+COMMENT ON COLUMN users.profile_image IS '프로필 이미지 URL';
+COMMENT ON COLUMN users.created_at IS '생성 시각';
+COMMENT ON COLUMN users.updated_at IS '수정 시각';
+COMMENT ON COLUMN users.deleted_at IS '삭제 시각 (소프트 삭제)';
+COMMENT ON COLUMN users.is_active IS '활성화 여부';
+
 -- ============================================
 -- 2. 판매자 관리
 -- ============================================
@@ -37,6 +57,9 @@ CREATE TABLE sellers (
                          is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
+CREATE INDEX idx_seller_business_number ON sellers(business_number);
+CREATE INDEX idx_seller_email ON sellers(email);
+
 -- ============================================
 -- 3. 카테고리 관리
 -- ============================================
@@ -49,6 +72,9 @@ CREATE TABLE categories (
                             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             FOREIGN KEY (parent_id) REFERENCES categories(id) ON DELETE SET NULL
 );
+
+CREATE INDEX idx_category_name ON categories(name);
+CREATE INDEX idx_category_parent_id ON categories(parent_id);
 
 -- ============================================
 -- 4. 도서 관리
@@ -259,7 +285,8 @@ CREATE TABLE user_coupons (
                               used_at TIMESTAMP,
                               created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                               FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-                              FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE CASCADE
+                              FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE CASCADE,
+                              UNIQUE(user_id, coupon_id)
 );
 
 CREATE UNIQUE INDEX idx_user_coupon_unique ON user_coupons(user_id, coupon_id);

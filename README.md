@@ -30,54 +30,11 @@
 
 <br>
 
-## 2. 기술 스택
-
-| 구분      | 기술                           |
-|---------|------------------------------|
-| Language | Java 17                      |
-| Framework | Spring Boot                  |
-| Database | PostgreSQL                   |
-| ORM     | Spring Data JPA (Hibernate)  |
-| Auth    | JWT (Access / Refresh Token) |
-| Cache   | Redis                        |
-| Migration | Flyway                       |
-| API Docs | Swagger (springdoc-openapi)  |
-| Test    | JUnit 5                      |
-| Deploy  | JCloud + Docker              |
-| CI      | Github Action                |
-
-<br>
-
-## 3. 디렉토리 구조
-
-```text
-src/main/java/com/bookstore/api
-├─ admin           # 관리자 전용 기능
-├─ auth            # 인증/인가 (JWT, 로그인, 토큰 재발급)
-├─ book            # 도서(상품)
-├─ cart            # 장바구니
-├─ category        # 카테고리 관리
-├─ comment         # 댓글
-├─ common          # 공통 응답/예외/유틸
-├─ config          # 보안, Swagger, Redis 설정
-├─ coupon          # 쿠폰
-├─ favorite        # 즐겨찾기
-├─ user            # 사용자 관리
-├─ order           # 주문
-├─ review          # 리뷰
-├─ security        # Spring Security + JWT
-├─ seller          # 판매자 관리
-├─ healthcheck     # 헬스체크
-└─ root            # 루트 엔드포인트
-```
-
-<br>
-
 ---
 
-## 4. 실행 방법
+## 2. 실행 방법
 
-### 4-1. 로컬 실행
+### 2-1. 로컬 실행
 
 ```bash
 # 1. 환경 변수 설정
@@ -96,7 +53,7 @@ java -jar build/libs/bookstore-api.jar
 ./gradlew bootRun
 ```
 
-### 4-2. Docker 실행
+### 2-2. Docker 실행
 
 ```bash
 docker-compose up -d --build
@@ -104,7 +61,7 @@ docker-compose up -d --build
 
 <br>
 
-## 5. 환경 변수 설명
+## 3. 환경 변수 설명
 
 .env.example 기준
 
@@ -134,9 +91,21 @@ SERVER_PORT=8080
 
 <br>
 
-## 6. 인증 / 인가 구조
+## 4. 배포 주소 (jcloud)
 
-### 6-1. 인증 흐름 (JWT)
+| 구분           | 주소                                               |
+|--------------| ------------------------------------------------ |
+| 배포 URL       | http://113.198.66.75:10217                       |
+| Swagger      | http://113.198.66.75:10217/swagger-ui/index.html |
+| Health Check | http://113.198.66.75:10217/actuator/health            |
+
+<br>
+
+---
+
+## 5. 인증 / 인가 구조
+
+### 5-1. 인증 흐름 (JWT)
 
 1. `POST /auth/login`
 2. Access Token / Refresh Token 발급
@@ -147,7 +116,7 @@ SERVER_PORT=8080
 Authorization: Bearer <ACCESS_TOKEN>
 ```
 
-### 6-2. Role 기반 인가 (RBAC)
+### 5-2. Role 기반 인가 (RBAC)
 
 | Role       | 설명     |
 | ---------- | ------ |
@@ -162,16 +131,27 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 <br>
 
-## 7. 예제 계정
+## 6. 예제 계정
 
-| 구분    | 이메일                                           | 비밀번호        |
-| ----- | --------------------------------------------- |-------------|
-| USER  | [user1@example.com](mailto:user1@example.com) | userpwd123  |
-| ADMIN | [admin@example.com](mailto:admin@example.com) | adminpwd123 |
+| 구분    | 이메일                                           | 비밀번호      |
+| ----- | --------------------------------------------- |-----------|
+| USER  | [user1@example.com](mailto:user1@example.com) | P@ssw0rd! |
+| ADMIN | [admin@example.com](mailto:admin@example.com) | P@ssw0rd!|
 
 <br>
 
 ---
+
+## 7. DB 연결 정보 (테스트용)
+
+| 항목       | 값         |
+|----------|-----------|
+| Host     | postgres  |
+| Port     | 5432      |
+| DB_NAME   | bookstore |
+| USERNAME | postgres  |
+
+<br>
 
 ## 8. API 엔드포인트 요약
 
@@ -195,12 +175,34 @@ Authorization: Bearer <ACCESS_TOKEN>
 * `PATCH /categories/{id}` (ADMIN)
 * `DELETE /categories/{id}` (ADMIN)
 
-
 > 전체 엔드포인트는 **Swagger 문서** 참고
 
 <br>
 
-## 9. 공통 응답 & 에러 처리
+---
+
+## 9. 보안 및 성능 고려사항
+
+* JWT 기반 인증/인가
+* 비밀번호 bcrypt 해시
+* Redis 캐싱 적용
+* 인덱스 기반 조회 최적화
+* Global Exception Handler로 에러 규격 통일
+* 헬스체크 API 제공
+
+<br>
+
+## 10. 한계와 개선 계획
+
+* 대용량 트래픽 환경에 대한 부하 테스트 미흡
+* 관리자 통계 API 기능 확장 필요
+* 캐싱 전략 세분화 예정
+
+<br>
+
+---
+
+## 11. 공통 응답 & 에러 처리
 
 ### 성공 응답
 
@@ -226,21 +228,43 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 <br>
 
----
+## 12. 디렉토리 구조
 
-## 10. 보안 및 성능 고려사항
-
-* JWT 기반 인증/인가
-* 비밀번호 bcrypt 해시
-* Redis 캐싱 적용
-* 인덱스 기반 조회 최적화
-* Global Exception Handler로 에러 규격 통일
-* 헬스체크 API 제공
+```text
+src/main/java/com/bookstore/api
+├─ admin           # 관리자 전용 기능
+├─ auth            # 인증/인가 (JWT, 로그인, 토큰 재발급)
+├─ book            # 도서(상품)
+├─ cart            # 장바구니
+├─ category        # 카테고리 관리
+├─ comment         # 댓글
+├─ common          # 공통 응답/예외/유틸
+├─ config          # 보안, Swagger, Redis 설정
+├─ coupon          # 쿠폰
+├─ favorite        # 즐겨찾기
+├─ user            # 사용자 관리
+├─ order           # 주문
+├─ review          # 리뷰
+├─ security        # Spring Security + JWT
+├─ seller          # 판매자 관리
+├─ healthcheck     # 헬스체크
+└─ root            # 루트 엔드포인트
+```
 
 <br>
 
-## 11. 테스트
+## 13. 기술 스택
 
-* JUnit 기반 테스트
-* 인증/인가 포함 테스트
-
+| 구분      | 기술                           |
+|---------|------------------------------|
+| Language | Java 17                      |
+| Framework | Spring Boot                  |
+| Database | PostgreSQL                   |
+| ORM     | Spring Data JPA (Hibernate)  |
+| Auth    | JWT (Access / Refresh Token) |
+| Cache   | Redis                        |
+| Migration | Flyway                       |
+| API Docs | Swagger (springdoc-openapi)  |
+| Test    | JUnit 5                      |
+| Deploy  | JCloud + Docker              |
+| CI      | Github Action                |

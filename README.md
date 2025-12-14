@@ -30,8 +30,6 @@
 
 <br>
 
----
-
 ## 2. 실행 방법
 
 ### 2-1. 로컬 실행
@@ -60,6 +58,8 @@ docker-compose up -d --build
 ```
 
 <br>
+
+---
 
 ## 3. 환경 변수 설명
 
@@ -131,6 +131,8 @@ Authorization: Bearer <ACCESS_TOKEN>
 
 <br>
 
+---
+
 ## 6. 예제 계정
 
 | 구분    | 이메일                                           | 비밀번호      |
@@ -139,8 +141,6 @@ Authorization: Bearer <ACCESS_TOKEN>
 | ADMIN | [admin@example.com](mailto:admin@example.com) | P@ssw0rd!|
 
 <br>
-
----
 
 ## 7. DB 연결 정보 (테스트용)
 
